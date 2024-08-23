@@ -1,13 +1,6 @@
 # Projeto de Backend com .NET e Docker
 
-Este é um projeto de backend desenvolvido em .NET 8. O projeto foi configurado para ser executado facilmente com Docker, garantindo que todas as dependências e configurações estejam prontas para uso.
-
-## Requisitos
-
-Antes de iniciar, certifique-se de ter os seguintes softwares instalados:
-
-- **Docker**: Para criar e gerenciar os containers.
-- **Docker Compose**: Para orquestrar a aplicação e suas dependências (como o banco de dados PostgreSQL).
+Este é um projeto de backend desenvolvido em .NET 8.
 
 ## configurando o envio de emails:
 Este projeto inclui funcionalidade para envio de emails utilizando SMTP. Para que o envio de emails funcione corretamente, você precisará configurar as credenciais SMTP no arquivo appsettings.json.
@@ -23,9 +16,14 @@ Primeiro, clone o repositório para a sua máquina local:
 git clone https://github.com/seu-usuario/seu-repositorio.git
 cd seu-repositorio
 
-### 2 - Executasndo o projeto com docker:
+### 2 - Configure as credenciais do banco de dados em appsettings.json:
 ```bash
-docker-compose up --build
+ConnectionStrings ....
+
+### 3 - rode as migrações:
+```bash
+dotnet ef database update
+
 
 ### 3 - Acessando a API
 ```bash
