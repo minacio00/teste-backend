@@ -9,6 +9,10 @@ Antes de iniciar, certifique-se de ter os seguintes softwares instalados:
 - **Docker**: Para criar e gerenciar os containers.
 - **Docker Compose**: Para orquestrar a aplicação e suas dependências (como o banco de dados PostgreSQL).
 
+## configurando o envio de emails:
+Este projeto inclui funcionalidade para envio de emails utilizando SMTP. Para que o envio de emails funcione corretamente, você precisará configurar as credenciais SMTP no arquivo appsettings.json.
+Abra o arquivo appsettings.json na raiz do projeto e edite a seção "Smtp" com as suas credenciais
+
 ## Como Rodar o Projeto
 
 ### 1. Clonar o Repositório
