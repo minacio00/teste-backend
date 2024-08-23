@@ -29,7 +29,7 @@ public class AuthController : ControllerBase
             var emailBody = $"<p>Click the link below to reset your password:</p><p><a href='{resetLink}'>Reset Password</a></p>";
             await _emailService.SendEmailAsync(user.Email, "Password Reset Request", emailBody);
 
-             return Ok(new { message = "Email com Link para reset enviado", token = user.ResetToken });;
+            return Ok(new { message = "Email com Link para reset enviado", token = user.ResetToken }); ;
         }
         catch (ArgumentException ex)
         {
@@ -39,13 +39,14 @@ public class AuthController : ControllerBase
 
     [HttpPost("reset-password")]
     public IActionResult ResetPassword([FromBody] ResetPasswordDTO dto)
-    { var success = _authService.ResetPassword(dto);
-            if (!success)
-            {
-                return BadRequest("Token de reset invalido");
-            }
+    {
+        var success = _authService.ResetPassword(dto);
+        if (!success)
+        {
+            return BadRequest("Token de reset invalido");
+        }
 
-            return Ok("Senha alterada com sucesso");
+        return Ok("Senha alterada com sucesso");
     }
 
     [HttpGet("{id}")]
@@ -56,7 +57,14 @@ public class AuthController : ControllerBase
         {
             return NotFound();
         }
-        return Ok(user);
+        // Pela simplicidade do teste não foi utilizado autoMapper
+        var readUserDto = new ReadUserDTO
+        {
+            Id = user.Id,
+            Email = user.Email,
+        };
+
+        return Ok(readUserDto);
     }
 
     [HttpPost("register")]
@@ -65,7 +73,13 @@ public class AuthController : ControllerBase
         try
         {
             var user = _authService.RegisterUser(dto);
-            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+            var readUserDto = new ReadUserDTO
+            {
+                Id = user.Id,
+                Email = user.Email,
+
+            };
+            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, readUserDto);
         }
         catch (ArgumentException ex)
         {
@@ -73,21 +87,21 @@ public class AuthController : ControllerBase
         }
     }
     [HttpPost("login")]
-    public IActionResult Login([FromBody] PostUserDTO dto) 
+    public IActionResult Login([FromBody] PostUserDTO dto)
     {
         if (!ModelState.IsValid)
-    {
-        return BadRequest(ModelState);
-    }
+        {
+            return BadRequest(ModelState);
+        }
 
-    var user = _authService.ValidateUser(dto.Email, dto.Password);
-    if (user == null)
-    {
-        return Unauthorized("Credenciais inválidas.");
-    }
-    //se o usuário for válido, retorna um jwt access token
-    var token = _authService.GenerateJwtToken(user);
+        var user = _authService.ValidateUser(dto.Email, dto.Password);
+        if (user == null)
+        {
+            return Unauthorized("Credenciais inválidas.");
+        }
+        //se o usuário for válido, retorna um jwt access token
+        var token = _authService.GenerateJwtToken(user);
 
-    return Ok(new { AccessToken = token });
+        return Ok(new { AccessToken = token });
     }
 }

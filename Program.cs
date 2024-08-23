@@ -7,8 +7,16 @@ using test_backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Para acelerar a resolução do teste a chave está sendo carregada como plain text
-// não é recomendado em ambiente de produção
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder
+            .AllowAnyOrigin() 
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
+
+
 
 
 builder.Configuration
@@ -61,8 +69,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
+app.UseCors("AllowSpecificOrigin"); 
 app.UseAuthorization();
 
 app.MapControllers();
