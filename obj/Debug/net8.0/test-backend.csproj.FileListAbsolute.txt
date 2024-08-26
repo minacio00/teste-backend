@@ -114,3 +114,5 @@
 /home/mateus/projetos_dotnet/test-backend/bin/Debug/net8.0/BouncyCastle.Cryptography.dll
 /home/mateus/projetos_dotnet/test-backend/bin/Debug/net8.0/MailKit.dll
 /home/mateus/projetos_dotnet/test-backend/bin/Debug/net8.0/MimeKit.dll
+/home/mateus/projetos_dotnet/test-backend/obj/Debug/net8.0/test-backend.sourcelink.json
+/home/mateus/projetos_dotnet/test-backend/bin/Debug/net8.0/AutoMapper.dll
