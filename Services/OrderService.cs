@@ -28,7 +28,6 @@ namespace test_backend.Services
                 .Where(o => o.DeletedAt == null)
                 .ToListAsync();
 
-            // Map orders to ReadOrderDTO
             var orderDtos = _mapper.Map<IEnumerable<ReadOrderDTO>>(orders);
 
             return orderDtos;
@@ -48,7 +47,8 @@ namespace test_backend.Services
             {
                 OrderDate = DateTime.UtcNow,
                 Status = "Em preparação",
-                TotalAmount = 0 //
+                TotalAmount = 0, //
+                PaymentMethod = (PaymentMethod)orderDto.PaymentMethod,
             };
 
             foreach (var productQuantity in orderDto.Products)

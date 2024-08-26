@@ -11,6 +11,6 @@ public class CreateOrderDTO
 
     public List<ProductQuantity> Products {get; set;}
     [Required(ErrorMessage ="PaymentMethod é obrigatório")]
-    public PaymentMethod PaymentMethod {get; set;}
+    public PaymentMethod? PaymentMethod {get; set;}
 
 }

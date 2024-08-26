@@ -16,14 +16,16 @@ public class OrderProfile : Profile
                     Name = po.Product.Name,
                     Price = po.Product.Price ?? 0,
                     Quantity = po.Quantity
-                })));
+                })))
+                .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.PaymentMethod));
 
             CreateMap<CreateOrderDTO, Order>()
             .ForMember(dest => dest.ProductOrders, opt => opt.MapFrom(src => src.Products.Select(p => new ProductOrder
             {
                 ProductId = p.ProductId,
                 Quantity = p.Quantity
-            })));
+            })))
+             .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.PaymentMethod));
     }
 
 }
