@@ -15,16 +15,20 @@ Primeiro, clone o repositório para a sua máquina local:
 ```bash
 git clone https://github.com/seu-usuario/seu-repositorio.git
 cd seu-repositorio
+```
 
 ### 2 - Configure as credenciais do banco de dados em appsettings.json:
 ```bash
 ConnectionStrings ....
+```
 
 ### 3 - rode as migrações:
 ```bash
 dotnet ef database update
+```
 
 
 ### 3 - Acessando a API
 ```bash
 http://localhost:5000/swagger
+```
