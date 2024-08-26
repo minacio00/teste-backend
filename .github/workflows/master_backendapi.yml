@@ -46,7 +46,7 @@ jobs:
         name: published-app
         path: deploy
     
-    - name: create directory
+    - name: Create target directory if it doesn't exist
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SERVER_IP }}
@@ -58,14 +58,17 @@ jobs:
             mkdir -p /home/azureuser/app;
             sudo chown azureuser:azureuser /home/azureuser/app;
           fi
-    - name: Copy files to the server
+
+    - name: Copy repository and build files to the server
       uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
-        source: "deploy/*"
+        source: |
+          ./  # Copy the entire repository
+          ./publish/*  # Copy the published files
         target: "/home/azureuser/app"
 
   run-migrations-and-restart:
