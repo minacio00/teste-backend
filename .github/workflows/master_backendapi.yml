@@ -1,0 +1,75 @@
+name: .NET Application Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build and Publish .NET Application
+    runs-on: ubuntu-latest
+    outputs:
+      artifact-path: ${{ steps.publish.outputs.artifact-path }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Build project
+      run: dotnet build test-backend.csproj --configuration Release
+
+    - name: Publish project
+      id: publish
+      run: |
+        dotnet publish test-backend.csproj -c Release -o ./publish
+        echo "::set-output name=artifact-path::$(pwd)/publish"
+
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: published-app
+        path: ${{ steps.publish.outputs.artifact-path }}
+
+  deploy:
+    name: Deploy Application
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: published-app
+        path: deploy
+
+    - name: Copy files to the server
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        source: "deploy/*"
+        target: "/path/to/server/directory"
+
+  run-migrations-and-restart:
+    name: Run Migrations and Restart Server
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: SSH and Run Commands
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        script: |
+          cd /path/to/server/directory
+          git pull
+          dotnet ef database update
+          sudo systemctl restart your-dotnet-service
