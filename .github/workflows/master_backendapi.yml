@@ -81,6 +81,6 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: 22
         script: |
-          cd /server
+          cd /home/azureuser/app
+          dotnet restore
           dotnet ef database update
-          sudo systemctl restart your-dotnet-service
